@@ -6,6 +6,9 @@ article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,su
 }
 
 body {
+	/* For layouts/default */
+	color:  #fff;
+	/* For homepage*/
 	--color-text: #fff;
 	--color-bg: #101010;
 	--color-link: #fff;
