@@ -3,112 +3,115 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Kristen Khong | UX Designer</title>
-		<meta name="description" content="Kristen Khong - UI UX Designer, Malaysia" />
-		<meta name="keywords" content="designer, ui, ux, art director, Malaysia, freelancer, freelance" />
-		<meta name="author" content="Kristen Khong" />
+		<title>Image Reveal Hover Effects | Codrops</title>
+		<meta name="description" content="Some link hover effect that reveal a thumbnail in different creative ways." />
+		<meta name="keywords" content="slideshow, reveal, effect, animation, web design, template, demo" />
+		<meta name="author" content="Codrops" />
 		<link rel="shortcut icon" href="favicon.ico">
-		<link href="https://fonts.googleapis.com/css?family=Anton|Niramit:400,600,700" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="css/base.css" />
 		<script>document.documentElement.className="js";var supportsCssVars=function(){var e,t=document.createElement("style");return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
-		<!--script src="//tympanus.net/codrops/adpacks/analytics.js"></script-->
 	</head>
 	<body class="loading">
-		<svg class="hidden">
-			<symbol id="icon-arrow" viewBox="0 0 24 24">
-				<title>arrow</title>
-				<polygon points="6.3,12.8 20.9,12.8 20.9,11.2 6.3,11.2 10.2,7.2 9,6 3.1,12 9,18 10.2,16.8 "/>
-			</symbol>
-		</svg>
 		<main>
+			<div class="message">Please try with a pointing device to see the hover effects.</div>
 			<div class="frame">
-				<h2 class="pageheader">Kristen Khong</h2>
-				<nav class="menutop">
-					<a class="menutop__item" href="about.md">about</a>
-					<a class="menutop__item" href="contact">contact</a>
-					<a class="menutop__item menutop__item--social" target="_blank" href="https://www.behance.net/KristenKhong">behance</a>
-					<a class="menutop__item menutop__item--social" target="_blank" href="https://dribbble.com/kristenkhong">dribbble</a>
-					<a class="menutop__item menutop__item--social" target="_blank" href="https://www.linkedin.com/in/kristenkhong/">linkedin</a>
-				</nav>
+				<h1 class="frame__title">Image Reveal Hover Effects</h1>
+				<div class="frame__links">
+					<a href="https://tympanus.net/Development/PageFlipLayout/">Previous Demo</a>
+					<a href="https://tympanus.net/codrops/?p=36588">Article</a>
+				</div>
+				<a class="github" href="https://github.com/codrops/ImageRevealHover/">GitHub</a>
 			</div>
-			<nav class="menu">
-				<div class="menu__item">
-					<span class="menu__item-number">01</span>
-					<span class="menu__item-textwrap"><span class="menu__item-text">Strategy</span></span>
-					<a class="menu__item-link">explore</a>
+			<div class="content">
+				<div class="block" data-fx="1">
+					<a class="block__title" data-img="img/1.jpg">Effect 1</a>
+					<a class="block__link" data-img="img/2.jpg">chloride</a>
+					<a class="block__link" data-img="img/3.jpg">magnesium</a>
+					<a class="block__link" data-img="img/4.jpg">zinc</a>
+					<a class="block__link" data-img="img/5.jpg">iodine</a>
 				</div>
-				<div class="menu__item">
-					<span class="menu__item-number">02</span>
-					<span class="menu__item-textwrap"><span class="menu__item-text">Websites</span></span>
-					<a class="menu__item-link">explore</a>
+				<div class="block" data-fx="2">
+					<a class="block__title" data-img="img/6.jpg">Effect 2</a>
+					<a class="block__link" data-img="img/7.jpg">mimas</a>
+					<a class="block__link" data-img="img/8.jpg">phobos</a>
+					<a class="block__link" data-img="img/9.jpg">lapetus</a>
+					<a class="block__link" data-img="img/10.jpg">titania</a>
 				</div>
-				<div class="menu__item">
-					<span class="menu__item-number">03</span>
-					<span class="menu__item-textwrap"><span class="menu__item-text">Apps</span></span>
-					<a class="menu__item-link">explore</a>
+				<div class="block" data-fx="3">
+					<a class="block__title" data-img="img/11.jpg">Effect 3</a>
+					<a class="block__link" data-img="img/12.jpg">Capitate</a>
+					<a class="block__link" data-img="img/13.jpg">Triquetral</a>
+					<a class="block__link" data-img="img/14.jpg">scaphoid</a>
+					<a class="block__link" data-img="img/15.jpg">Hamate</a>
 				</div>
-				<!--<div class="menu__item">
-					<span class="menu__item-number">04</span>
-					<span class="menu__item-textwrap"><span class="menu__item-text">Animation</span></span>
-					<a class="menu__item-link">explore</a>
-				</div>-->
-			</nav>
-			<div class="page page--preview">
-				<div class="gridwrap">
-					<div class="grid grid--layout-1">
-						<div class="grid__item" style="background-image: url(img/1.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/3.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/4.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/5.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/6.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/7.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/8.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/9.jpg)"></div>
-					</div>
-					<div class="grid grid--layout-2">
-						<div class="grid__item" style="background-image: url(img/2015_cnp-2.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2018_4as-2.gif)"></div>
-						<div class="grid__item" style="background-image: url(img/2017_boozeat.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2017_boozeat-2.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2014_peri-vilege-1.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2014_peri-vilege-2.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2018_payfy.gif)"></div>
-						<div class="grid__item" style="background-image: url(img/2017_jobstreet-1.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2017_jobstreet-2.jpg)"></div>
-					</div>
-					<div class="grid grid--layout-3">
-						<div class="grid__item" style="background-image: url(img/2016-airasia.jpg)"></div>
-						<div class="grid__item"><video width="200" height="356" controls loop><source src="img/2018_menulab.mp4" type="video/mp4"></video></div>
-						<div class="grid__item" style="background-image: url(img/2015_castrol-1.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2014_dearnestle.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2015_cnp.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2015_castrol-2.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2015_castrol-3.jpg)"></div>
-						<div class="grid__item" style="background-image: url(img/2015_castrol-4.jpg)"></div>
-					</div>
+				<div class="block" data-fx="4">
+					<a class="block__title" data-img="img/16.jpg">Effect 4</a>
+					<a class="block__link" data-img="img/17.jpg">stratus</a>
+					<a class="block__link" data-img="img/18.jpg">cirrus</a>
+					<a class="block__link" data-img="img/19.jpg">nimbus</a>
+					<a class="block__link" data-img="img/20.jpg">cumulus</a>
+				</div>
+				<div class="block" data-fx="5">
+					<a class="block__title" data-img="img/2.jpg">Effect 5</a>
+					<a class="block__link" data-img="img/4.jpg">king's quest</a>
+					<a class="block__link" data-img="img/6.jpg">asteroids</a>
+					<a class="block__link" data-img="img/8.jpg">centipede</a>
+					<a class="block__link" data-img="img/10.jpg">defender</a>
+				</div>
+				<div class="block" data-fx="6">
+					<a class="block__title" data-img="img/9.jpg">Effect 6</a>
+					<a class="block__link" data-img="img/7.jpg">Jerry</a>
+					<a class="block__link" data-img="img/5.jpg">Michael</a>
+					<a class="block__link" data-img="img/3.jpg">Jason</a>
+					<a class="block__link" data-img="img/1.jpg">Julia</a>
+				</div>
+				<div class="block" data-fx="7">
+					<a class="block__title" data-img="img/10.jpg">Effect 7</a>
+					<a class="block__link" data-img="img/8.jpg">Mistral</a>
+					<a class="block__link" data-img="img/6.jpg">Sirocco</a>
+					<a class="block__link" data-img="img/4.jpg">Khamseen</a>
+					<a class="block__link" data-img="img/2.jpg">Brickfielder</a>
+				</div>
+				<div class="block" data-fx="8">
+					<a class="block__title" data-img="img/20.jpg">Effect 8</a>
+					<a class="block__link" data-img="img/19.jpg">Quechan</a>
+					<a class="block__link" data-img="img/3.jpg">Chemehuevi</a>
+					<a class="block__link" data-img="img/14.jpg">Meskwaki</a>
+					<a class="block__link" data-img="img/12.jpg">Ponca</a>
+				</div>
+				<div class="block" data-fx="9">
+					<a class="block__title" data-img="img/1.jpg">Effect 9</a>
+					<a class="block__link" data-img="img/2.jpg">Dugbe</a>
+					<a class="block__link" data-img="img/3.jpg">Lordsdale</a>
+					<a class="block__link" data-img="img/4.jpg">Sindbis</a>
+					<a class="block__link" data-img="img/7.jpg">Cowpox</a>
+				</div>
+				<div class="block" data-fx="10">
+					<a class="block__title" data-img="img/6.jpg,img/9.jpg,img/8.jpg">Effect 10</a>
+					<a class="block__link" data-img="img/5.jpg,img/4.jpg,img/11.jpg">Khufu</a>
+					<a class="block__link" data-img="img/12.jpg,img/13.jpg,img/14.jpg">Hatshepsut</a>
+					<a class="block__link" data-img="img/17.jpg,img/16.jpg,img/15.jpg">Tutankhamun</a>
+					<a class="block__link" data-img="img/19.jpg,img/20.jpg,img/1.jpg">Djoser</a>
+				</div>
+				<div class="block" data-fx="11">
+					<a class="block__title" data-img="img/1.jpg">Effect 11</a>
+					<a class="block__link" data-img="img/2.jpg">bahuk</a>
+					<a class="block__link" data-img="img/3.jpg">godiva</a>
+					<a class="block__link" data-img="img/4.jpg">lepanto</a>
+					<a class="block__link" data-img="img/5.jpg">pierrot</a>
+				</div>
+				<div class="content__text">
+					All you have to learn here is how to have fun. It's almost like something out of a <a class="content__text-link" data-img="img/20.jpg" data-fx="1">fairytale</a> book. Almost everything is going to happen for you automatically - you don't have to spend any time <a class="content__text-link" data-img="img/19.jpg" data-fx="2">working</a> or worrying. Take your time. Speed will come later. A thin paint will stick to a thick paint. There comes a nice little <a class="content__text-link" data-img="img/18.jpg" data-fx="3">fluffer</a>.
 
-					<button class="gridback"><svg class="icon icon--arrow"><use xlink:href="#icon-arrow"></use></svg></button>
-				</div><!-- /gridwrap -->
-				<div class="content">
-					<div class="content__item">
-						Hmm, how to explain this... from all my years working in agencies and startups, I find that the most important first step is strategy. Without strategy, shit happens and you're not prepared for it. I provide services for strategy before driving into the execution, by combining research, strategy, and analytics into a report/deck. 
-					</div>
-					<div class="content__item">
-						So websites. There's mobile friendly, mobile web, desktop, responsive, adaptive, e-comm, SEO, CMS, PWA... All it matters the designs works.<p>Here's an inspirational quote for ya.</p><p>"Most people make the mistake of thinking design is what it looks like. People think it’s this veneer – that the designers are handed this box and told, “Make it look good!” That’s not what we think design is. It’s not just what it looks like and feels like. Design is how it works." — STEVE JOBS</p> 
-					</div>
-					<div class="content__item">
-						Above are my app designs over the years, mainly for Android and IOS. Some of my best works are for clients such as - AirAsia, Nando's, Nestlé, and Castrol.
-					</div>
-					<div class="content__item">
-						Coming soon.
-					</div>
+					You can create the world you want to see and be a part of. You have that <a class="content__text-link" data-img="img/17.jpg" data-fx="4">power</a>. Don't forget to tell these special people in your life just how special they are to you. Let's build an almighty <a class="content__text-link"  data-img="img/16.jpg" data-fx="5">mountain</a>. Isn't that fantastic that you can create an almighty tree that fast? The only <a class="content__text-link" data-img="img/15.jpg" data-fx="6">prerequisite</a> is that it makes you happy. If it makes you happy then it's good.
+
+					This is your <a class="content__text-link" data-img="img/14.jpg" data-fx="7">creation</a> - and it's just as unique and <a class="content__text-link" data-img="img/13.jpg" data-fx="8">special</a> as you are. Decide where your cloud lives. Maybe he lives right in here. You have to make those little <a class="content__text-link" data-img="img/12.jpg" data-fx="9">noises</a> or it won't work. Just go out and talk to a tree. Make <a class="content__text-link" data-img="img/10.jpg,img/14.jpg,img/15.jpg" data-fx="10">friends</a> with it. This is truly an almighty <a class="content__text-link" data-img="img/1.jpg" data-fx="11">mountain</a>.
 				</div>
-			</div><!-- /page -->
+			</div>
 		</main>
+		<script src="js/charming.min.js"></script>
 		<script src="js/imagesloaded.pkgd.min.js"></script>
 		<script src="js/TweenMax.min.js"></script>
 		<script src="js/demo.js"></script>
 	</body>
 </html>
-
