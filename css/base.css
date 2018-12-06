@@ -104,7 +104,6 @@ main {
 }
 
 .frame__links a {
-	text-transform: lowercase;
 }
 
 .frame__links a:not(:last-child) {
@@ -112,12 +111,10 @@ main {
 }
 
 .github {
-	text-transform: lowercase;
 	margin-left: 1rem;
 }
 
 .block {
-	text-transform: lowercase;
 	padding: 0 4rem 20vh;
 	display: flex;
 	flex-direction: column;
@@ -373,4 +370,105 @@ a.content__text-link[data-fx="10"]:hover::after {
 	.content__text {
 		grid-column: span 3;
 	}
+}
+
+/* NEWlY ADDED */
+.menu {
+	position: fixed;
+	top: 9.6875rem;
+	left: 0;
+	width: 100%;
+	height: calc(100% - 9.6875rem);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 10000;
+	pointer-events: none;
+}
+
+.menu__item {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	pointer-events: auto;
+}
+
+.menu--closed .menu__item {
+	pointer-events: none;
+}
+
+.menu__item-number {
+	display: none;
+	font-size: 0.85rem;
+}
+
+.menu__item-textwrap {
+	position: relative;
+	overflow: hidden;
+	line-height: 1;
+	margin: 1rem 0 0 0;
+}
+
+.menu__item-text {
+	font-family: "Anton", Arial, sans-serif;
+	text-transform: uppercase;
+	text-fill-color: #fff;
+	-webkit-text-fill-color: #fff;
+	/*text-stroke: 2px #fff;
+	-webkit-text-stroke: 2px #fff;
+	-webkit-text-fill-color: transparent;
+	text-fill-color: transparent;
+	color: transparent;*/
+	font-size: 2rem;
+	padding: 0 0 1rem 0 ;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.menu__item--current .menu__item-text {
+	-webkit-text-fill-color: #fff;
+	text-fill-color: #fff;
+	color: #fff;
+	-webkit-text-stroke: 2px transparent;
+	text-stroke: 2px transparent;
+}
+
+.menu__item-link {
+	pointer-events: none;
+	font-weight: bold;
+	align-self: flex-end;
+	opacity: 0;
+	width: 100%;
+	cursor: pointer;
+	text-align: left;
+}
+
+.menu__item--current .menu__item-link {
+	pointer-events: auto;
+}
+	.menu__item {
+		/*margin: 1rem 0;*/
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+	}
+	.menu__item-number {
+		display: block;
+	}
+	.menu__item-text {
+		font-size: 4vh; 
+	}
+	.menu__item-link {
+		text-align: left;
+		width: auto;
+	}
+.menu__item-number {
+		display: block;
+	}
+.menu__item-textwrap {
+	position: relative;
+	overflow: hidden;
+	line-height: 1;
+	margin: 1rem 0 0 0;
 }
