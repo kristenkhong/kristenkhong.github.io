@@ -9,464 +9,1188 @@
  * http://www.codrops.com
  */
 {
-    // https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/
-    function scrollIt(destination, duration = 200, easing = 'linear', callback) {
-        const easings = {
-          linear(t) {
-            return t;
-          },
-          easeInQuad(t) {
-            return t * t;
-          },
-          easeOutQuad(t) {
-            return t * (2 - t);
-          },
-          easeInOutQuad(t) {
-            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-          },
-          easeInCubic(t) {
-            return t * t * t;
-          },
-          easeOutCubic(t) {
-            return (--t) * t * t + 1;
-          },
-          easeInOutCubic(t) {
-            return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-          },
-          easeInQuart(t) {
-            return t * t * t * t;
-          },
-          easeOutQuart(t) {
-            return 1 - (--t) * t * t * t;
-          },
-          easeInOutQuart(t) {
-            return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
-          },
-          easeInQuint(t) {
-            return t * t * t * t * t;
-          },
-          easeOutQuint(t) {
-            return 1 + (--t) * t * t * t * t;
-          },
-          easeInOutQuint(t) {
-            return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t;
-          }
-        };
-      
-        const start = window.pageYOffset;
-        const startTime = 'now' in window.performance ? performance.now() : new Date().getTime();
-      
-        const documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-        const destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
-        const destinationOffsetToScroll = Math.round(documentHeight - destinationOffset < windowHeight ? documentHeight - windowHeight : destinationOffset);
-      
-        if ('requestAnimationFrame' in window === false) {
-            window.scroll(0, destinationOffsetToScroll);
-          if (callback) {
-            callback();
-          }
-          return;
-        }
-      
-        function scroll() {
-          const now = 'now' in window.performance ? performance.now() : new Date().getTime();
-          const time = Math.min(1, ((now - startTime) / duration));
-          const timeFunction = easings[easing](time);
-          window.scroll(0, Math.abs(Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start)));
-          if (window.pageYOffset === destinationOffsetToScroll) {
-            if (callback) {
-              callback();
-            }
-            return;
-          }
-      
-          requestAnimationFrame(scroll);
-        }
-      
-        scroll();
-    }
-
-    // Generates a random float.
-    const getRandom = (min, max) => (Math.random() * (max - min) + min).toFixed(2);
-
     // from http://www.quirksmode.org/js/events_properties.html#position
-    const getMousePos = (e) => {
+	const getMousePos = (e) => {
         let posx = 0;
         let posy = 0;
-        if (!e) e = window.event;
-        if (e.pageX || e.pageY) 	{
+		if (!e) e = window.event;
+		if (e.pageX || e.pageY) {
             posx = e.pageX;
-            posy = e.pageY;
-        }
-        else if (e.clientX || e.clientY) 	{
-            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-        }
+			posy = e.pageY;
+		}
+		else if (e.clientX || e.clientY) 	{
+			posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+			posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		}
         return { x : posx, y : posy }
-    };
-
-    // Equation of a line (y = mx + b ).
-    const lineEq = (y2, y1, x2, x1, currentVal) => {
-        const m = (y2 - y1) / (x2 - x1);
-        const b = y1 - m * x1;
-        return m * currentVal + b;
-    };
-
-    // Window sizes.
-    let winsize;
-    const calcWinsize = () => winsize = {width: window.innerWidth, height: window.innerHeight};
-    calcWinsize();
-    window.addEventListener('resize', calcWinsize);
-
-    let allowTilt = true;
-
-    class Grid {
-        constructor(el) {
-            this.DOM = {el: el};
-            // Some configuration values.
-            this.config = {
-                // The min and max values to move each item (y-axis) when we move the mouse.
-                titltOffset: {min: 5, max: 40}
-            };
-            // Grid items.
-            this.DOM.items = Array.from(this.DOM.el.querySelectorAll('.grid__item'));
-            // Total items.
-            this.itemsTotal = this.DOM.items.length;
-            // Spread the grid items.
-            this.spread();
-			//window.addEventListener('resize', () => this.spread());
-        }
-        spread() {
-            // Randomly spread the grid items.
-            this.DOM.items.forEach((item) => {
-                // The min and max values to move each item (y-axis) when we move the mouse.
-                const randnum = getRandom(this.config.titltOffset.min,this.config.titltOffset.max);
-                item.dataset.minTy = -1*randnum;
-                item.dataset.maxTy = randnum;
-
-                const rect = item.getBoundingClientRect();
-                // Item´s center point.
-                const center = {x: rect.left+rect.width/2, y: rect.top+rect.height/2};
-                // Calculate the item´s quadrant in the viewport.
-                const quadrant = center.x >= winsize.width/2 ?
-                                    center.y <= winsize.height/2 ? 1 : 4 :
-                                    center.y <= winsize.height/2 ? 2 : 3;
-                
-                // Now calculate how much to translate the item.
-                // The positions will be random but only in the area of the item´s quadrant.
-                // Also, consider a margin so the item does not stay completely out of the viewport or its quadrant.
-                const margins = {x: winsize.width*.05, y: winsize.height*.05}
-                const tx = quadrant === 1 || quadrant === 4 ? 
-                        getRandom(-1*center.x + winsize.width/2 + margins.x, winsize.width - center.x - margins.x) :
-                        getRandom(-1*center.x + margins.x, winsize.width/2 - center.x - margins.x);
-                const ty = quadrant === 1 || quadrant === 2 ?
-                        getRandom(-1*center.y + margins.y, winsize.height/2 - center.y - margins.y) :
-                        getRandom(-1*center.y + winsize.height/2 + margins.y, winsize.height - center.y - margins.y);
-
-                // Save the current translation.
-                item.dataset.ctx = tx;
-                item.dataset.cty = ty;
-
-                TweenMax.set(item, {
-                    x: tx,
-                    y: ty,
-                    scale: 0.5
-                });
-            });
-        }
-        tilt(ev) {
-            if ( !allowTilt ) return;
-            const mousepos = getMousePos(ev);
-            // Document scrolls.
-            const docScrolls = {
-                left : document.body.scrollLeft + document.documentElement.scrollLeft, 
-                top : document.body.scrollTop + document.documentElement.scrollTop
-            };
-            // Mouse position relative to the main element.
-            const relmousepos = { 
-                x : mousepos.x - docScrolls.left, 
-                y : mousepos.y - docScrolls.top 
-            };
-            // Movement settings for the tilt elements.
-            this.DOM.items.forEach((item) => {
-                TweenMax.to(item, 4, {
-                    ease: Quint.easeOut,
-                    y: Number(item.dataset.cty) + lineEq(item.dataset.maxTy,item.dataset.minTy,winsize.height,0,relmousepos.y)
-                });
-            });
-        }
-        hideItems(direction) {
-            return this.toggleItems('hide', direction);
-        }
-        showItems(direction) {
-            return this.toggleItems('show', direction);
-        }
-        toggleItems(action, direction) {
-            return new Promise((resolve, reject) => {
-                let cnt = 0;
-                this.DOM.items.forEach((item) => {
-                    const rect = item.getBoundingClientRect();
-                    
-                    // The speed and delay will depend on how much the item can be translated when moving the mouse (this.config.titltOffset).
-                    // This will result in some items moving faster than others and also starting at different times.
-                    const speed = lineEq(1.3,0.9,this.config.titltOffset.min,this.config.titltOffset.max,item.dataset.maxTy);
-                    const delay = lineEq(0,0.4,this.config.titltOffset.min,this.config.titltOffset.max,item.dataset.maxTy);
-    
-                    TweenMax.to(item, speed, {
-                        ease: Expo.easeInOut,
-                        delay: delay,
-                        startAt: action === 'show' ? {y: direction === 'up' ? `+=${winsize.height + rect.height}` : `-=${winsize.height + rect.height}`, opacity:1} : null,
-                        y: action === 'show' ? item.dataset.cty : 
-                            direction === 'up' ? `-=${winsize.height + rect.height}` : `+=${winsize.height + rect.height}`
-                    });
-
-                    TweenMax.to(item, action === 'show' ? speed*.55 : speed*.45, {
-                        ease: action === 'show' ? Quad.easeIn : Expo.easeIn,
-                        delay: delay,
-                        scaleX: 0.45,
-                        scaleY: getRandom(1,1.3),
-                        opacity: 0.5,
-                        onComplete: () => {
-                            TweenMax.to(item, action === 'show' ? speed*.45 : speed*.55, {
-                                ease: action === 'show' ? Expo.easeOut : Quad.easeOut,
-                                scaleX: 0.5,
-                                scaleY: 0.5,
-                                opacity: 1,
-                                onComplete: () => {
-                                    if ( action === 'hide' ) {
-                                        TweenMax.set(item, {opacity: 0, y: item.dataset.cty});
-                                    }
-                                    cnt++;
-                                    if ( this.itemsTotal === cnt ) {
-                                        resolve();
-                                    }
-
-                                    /*
-                                    // If we want to shuffle the items again after the navigation:
-                                    if ( action === 'hide' ) {
-                                        TweenMax.set(item, {opacity: 0, y: 0});
-                                    }
-                                    cnt++;
-                                    if ( this.itemsTotal === cnt ) {
-                                        if ( action === 'hide' ) {
-                                            this.spread();
-                                        }
-                                        resolve();
-                                    }
-                                    */
-                                }
-                            });    
-                        }
-                    });
-                });
-            });
-        }
-        open() {
-            return new Promise((resolve, reject) => {
-                this.DOM.el.classList.add('grid--open');
-
-                TweenMax.to(this.DOM.items, 1, {
-                    ease: Expo.easeInOut,
-                    x: 0,
-                    y: 0,
-					scale: 1.01,
-                    onComplete: resolve
-                });
-            });
-        }
-        close() {
-            return new Promise((resolve, reject) => {
-                this.DOM.el.classList.remove('grid--open');
-
-                this.DOM.items.forEach((item) => {
-                    TweenMax.to(item, 1, {
-                        ease: Expo.easeInOut,
-                        x: item.dataset.ctx,
-                        y: item.dataset.cty,
-                        scale: 0.5,
-                        onComplete: resolve
-                    });
-                });
-            });
-        }
     }
+    // Generate a random float.
+    const getRandomFloat = (min, max) => (Math.random() * (max - min) + min).toFixed(2);
 
-    class MenuItem {
+    /**
+     * One class per effect. 
+     * Lots of code is repeated, so that single effects can be easily used. 
+     */
+
+    // Effect 1
+    class HoverImgFx1 {
         constructor(el) {
             this.DOM = {el: el};
-            this.DOM.number = this.DOM.el.querySelector('.menu__item-number');
-            this.DOM.textwrap = this.DOM.el.querySelector('.menu__item-textwrap');
-            this.DOM.text = this.DOM.textwrap.querySelector('.menu__item-text');
-            this.DOM.link = this.DOM.el.querySelector('.menu__item-link');
-        }
-        toggleCurrent(direction = 'up') {
-            const isCurrent = this.DOM.el.classList.contains('menu__item--current');
-            this.DOM.el.classList[isCurrent ? 'remove' : 'add']('menu__item--current');
-            // Toggle the link element ("explore").
-            TweenMax.to(this.DOM.link, 1, {
-                ease: Expo.easeOut,
-                startAt: isCurrent ? null : {opacity: 0, y: direction === 'up' ? 15 : -15},
-                y: isCurrent ? direction === 'up' ? -15 : 15 : 0,
-                opacity: isCurrent ? 0 : 1
-            });
-        }
-        show() {
-            this.toggle('show');
-        }
-        hide() {
-            this.toggle('hide');
-        }
-        toggle(action) {
-            // Slide in/out the text.
-            TweenMax.to(this.DOM.text, action === 'hide' ? 0.5 : 1, {
-                ease: action === 'hide' ? Expo.easeIn : Expo.easeInOut,
-                startAt: action === 'hide' ? null : {y: '103%'},
-                y: action === 'hide' ? '103%' : '0%'
-            });
-            
-            // Fade in/out the number and link.
-            let extraElems = [this.DOM.number, this.DOM.link];
-            if ( action === 'show' && !this.DOM.el.classList.contains('menu__item--current') ) {
-                extraElems = [this.DOM.number];
-            }
-            TweenMax.to(extraElems, action === 'hide' ? 0.5 : 1, {
-                ease: action === 'hide' ? Quint.easeIn : Quint.easeInOut,
-                startAt: action === 'hide' ? null : {opacity: 0},
-                opacity: action === 'hide' ? 0 : 1
-            });
-        }
-	}
-	
-	class ContentItem {
-        constructor(el) {
-            this.DOM = {el: el};
-        }
-        toggleCurrent() {
-            this.DOM.el.classList[this.DOM.el.classList.contains('content__item--current') ? 'remove' : 'add']('content__item--current');
-        }
-    }
-
-    class NavController {
-        constructor(el) {
-            this.DOM = {menu: el}; // Initialize with the menu element.
-            // The Menu items instances.
-            this.menuItems = [];
-            Array.from(this.DOM.menu.querySelectorAll('.menu__item')).forEach((item) => this.menuItems.push(new MenuItem(item)));
-            // The page element (the grids and contents parent)
-            this.DOM.page = document.querySelector('.page');
-            // The grid´s wrap.
-            this.DOM.gridWrap = this.DOM.page.querySelector('.gridwrap');
-            // The back ctrl. For closing the grid/content view and go back to the main page.
-            this.DOM.backCtrl = this.DOM.page.querySelector('button.gridback');
-			// The content items instances.
-            this.contentItems = [];
-            Array.from(this.DOM.page.querySelectorAll('.content > .content__item')).forEach((item) => this.contentItems.push(new ContentItem(item)));
-            // The grid instances.
-            this.grids = [];
-            Array.from(this.DOM.gridWrap.querySelectorAll('.grid')).forEach((grid) => this.grids.push(new Grid(grid)));
-            this.init();
-        }
-        init() {
-            // Current nav menu item index (starting with the first one).
-            this.current = 0;
-            // Add current class to the first menu item.
-            this.menuItems[this.current].toggleCurrent();
-            // Also show the current grid items.
-            this.grids[this.current].DOM.items.forEach((item) => TweenMax.set(item, {opacity: 1}));
-            // Add current class to the first content item.
-            this.contentItems[this.current].toggleCurrent();
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealInner.style.overflow = 'hidden';
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
 
             this.initEvents();
         }
         initEvents() {
-            // Move the current grid´s items on the y-axis as the user moves the mouse.
-            this.mousemoveFn = (ev) => requestAnimationFrame(() => this.grids[this.current].tilt(ev));
-            window.addEventListener('mousemove', this.mousemoveFn);
-
-            // Clicking the menu item text and link. (navigation and show the grid/content).
-            for (const [pos, item] of this.menuItems.entries()) {
-                // Clicking on the menu item text will trigger the navigation: the current grid items move away and the new ones come in.
-                item.DOM.textwrap.addEventListener('click', () => this.navigate(pos));
-                // Clicking the view all will show the grid.
-                item.DOM.link.addEventListener('click', () => this.showContent(pos));
-            }
-
-            // Closing the grid/content view.
-            this.DOM.backCtrl.addEventListener('click', () => this.hideContent());
-        }
-        navigate(pos) {
-            if ( this.isAnimating || pos === this.current ) return;
-            const direction = this.current < pos ? 'up' : 'down';
-			this.menuItems[this.current].toggleCurrent(direction);
-			this.contentItems[this.current].toggleCurrent();
-            this.isAnimating = true;
-            // Disable the mousemove functionality.
-            allowTilt = false;
-            // Hide the current grid items.
-            this.grids[this.current].hideItems(direction);
-            // Update current value.
-            this.current = pos;
-			this.menuItems[this.current].toggleCurrent(direction);
-			this.contentItems[this.current].toggleCurrent();
-			// Show the next grid items.
-            this.grids[this.current].showItems(direction).then(() => {
-                this.isAnimating = false;
-                allowTilt = true;
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
             });
-        }
-        showContent(pos) {
-            if ( this.isAnimating || this.grids[this.current].DOM.el.classList.contains('grid--open') ) return;
-			this.isAnimating = true;
-			// Disable the mousemove functionality.
-            allowTilt = false;
-            // Disable the menu.
-            this.DOM.menu.classList.add('menu--closed');
-            // Show the grid.
-            this.grids[this.current].open().then(() => this.isAnimating = false);
-            // Hide the menu items.
-            for (const item of this.menuItems) {
-                item.hide();
-            }
-            // Allow scroll.
-            this.DOM.page.classList.remove('page--preview');
-            // Show back ctrl.
-            TweenMax.to(this.DOM.backCtrl, 1, {
-                ease: Expo.easeInOut,
-                opacity: 1
-            });
-        }
-        hideContent() {
-            if ( this.isAnimating || !this.grids[this.current].DOM.el.classList.contains('grid--open') ) return;
-            this.isAnimating = true;
-            // Hide back ctrl.
-            TweenMax.to(this.DOM.backCtrl, 1, {
-                ease: Expo.easeInOut,
-                opacity: 0
-            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
             
-            scrollIt(0, 300, 'easeOutQuad', () => {
-                // Disabel scroll.
-                this.DOM.page.classList.add('page--preview');
-                // Hide the grid.
-                this.grids[this.current].close().then(() => {
-                    // Enable the menu.
-                    this.DOM.menu.classList.remove('menu--closed');
-                    // Enable the mousemove functionality.
-                    allowTilt = true;
-                    this.isAnimating = false;
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.2, {
+                ease: Sine.easeOut,
+                startAt: {x: '-100%'},
+                x: '0%'
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.2, {
+                ease: Sine.easeOut,
+                startAt: {x: '100%'},
+                x: '0%'
+            }), 'begin');
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.2, {
+                ease: Sine.easeOut,
+                x: '100%'
+            }), 'begin')
+            
+            .add(new TweenMax(this.DOM.revealImg, 0.2, {
+                ease: Sine.easeOut,
+                x: '-100%'
+            }), 'begin');
+        }
+    }
+
+    // Effect 2
+    class HoverImgFx2 {
+        constructor(el) {
+            this.DOM = {el: el};
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.style.overflow = 'hidden';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealInner.style.overflow = 'hidden';
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .set([this.DOM.revealInner, this.DOM.revealImg], {transformOrigin: '50% 100%'})
+            .add(new TweenMax(this.DOM.revealInner, 0.4, {
+                ease: Expo.easeOut,
+                startAt: {x: '50%', y: '120%', rotation: 50},
+                x: '0%',
+                y: '0%',
+                rotation: 0
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.4, {
+                ease: Expo.easeOut,
+                startAt: {x: '-50%', y: '-120%', rotation: -50},
+                x: '0%',
+                y: '0%',
+                rotation: 0
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.7, {
+                ease: Expo.easeOut,
+                startAt: {scale: 2},
+                scale: 1
+            }), 'begin');
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            //.set([this.DOM.revealInner, this.DOM.revealImg], {transformOrigin: '50% 0%'})
+            .add(new TweenMax(this.DOM.revealInner, 0.6, {
+                ease: Expo.easeOut,
+                y: '-120%',
+                rotation: -5
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.6, {
+                ease: Expo.easeOut,
+                y: '120%',
+                rotation: 5,
+                scale: 1.2
+            }), 'begin')
+        }
+        animateLetters() {
+            this.DOM.letters.forEach((letter,pos) => {
+                TweenMax.set(letter, {opacity: 0});
+                const delay = pos*2/100;
+                TweenMax.to(letter, pos*0.07 + 0.2, {
+                    ease: Expo.easeOut,
+                    delay: delay,
+                    startAt: {x: '100%'},
+                    x: '0%',
+                    opacity: 1
                 });
-                // Show the menu items.
-                for (const item of this.menuItems) {
-                    item.show();
-                } 
             });
         }
     }
 
-    // Initialize the nav controller.
-    const controller = new NavController(document.querySelector('.menu'));
+    // Effect 3
+    class HoverImgFx3 {
+        constructor(el) {
+            this.DOM = {el: el};
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealInner.style.overflow = 'hidden';
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
 
-	// Preload all the images in the page..
-    imagesLoaded(document.querySelectorAll('.grid__item'), {background: true}, () => document.body.classList.remove('loading'));
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {opacity: 0, y: '50%', rotation: -15, scale:0},
+                y: '0%',
+                rotation: 0,
+                opacity: 1,
+                scale: 1
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {rotation: 15, scale: 2},
+                rotation: 0,
+                scale: 1
+            }), 'begin');
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.15, {
+                ease: Sine.easeOut,
+                y: '-40%',
+                rotation: 10,
+                scale: 0.9,
+                opacity: 0
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.15, {
+                ease: Sine.easeOut,
+                rotation: -10,
+                scale: 1.5
+            }), 'begin')
+        }
+        animateLetters() {
+            this.DOM.letters.forEach((letter,pos) => {
+                TweenMax.set(letter, {opacity: 0});
+                const delay = pos*2/100;
+                TweenMax.to(letter, pos*0.08 + 0.5, {
+                    ease: Expo.easeOut,
+                    delay: delay,
+                    startAt: {y: '50%'},
+                    y: '0%',
+                    opacity: 1
+                });
+            });
+        }
+    }
+
+    // Effect 4
+    class HoverImgFx4 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__deco"></div><div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealInner.style.overflow = 'hidden';
+            this.DOM.revealDeco = this.DOM.reveal.querySelector('.hover-reveal__deco');
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .set(this.DOM.revealInner, {opacity: 0})
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealDeco, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {opacity: 0, scale: 0, rotation: 35},
+                opacity: 1,
+                scale: 1,
+                rotation: 0
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {scale: 0, rotation: 35},
+                rotation: 0,
+                scale: 1,
+                opacity: 1
+            }), 'begin+=0.15')
+            .add(new TweenMax(this.DOM.revealImg, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {rotation: -35, scale: 2},
+                rotation: 0,
+                scale: 1
+            }), 'begin+=0.15')
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax([this.DOM.revealDeco, this.DOM.revealInner], 0.2, {
+                ease: Expo.easeOut,
+                opacity: 0,
+                scale: 0.9
+            }), 'begin')
+        }
+        animateLetters() {
+            this.DOM.letters.forEach((letter,pos) => {
+                TweenMax.set(letter, {opacity: 0});
+                const delay = (pos+1)*8/100;
+                TweenMax.to(letter, 0.1, {
+                    ease: Expo.easeOut,
+                    delay: delay,
+                    opacity: 1
+                });
+            });
+        }
+    }
+
+    // Effect 5
+    class HoverImgFx5 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.style.overflow = 'hidden';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__deco"></div><div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealInner.style.overflow = 'hidden';
+            this.DOM.revealDeco = this.DOM.reveal.querySelector('.hover-reveal__deco');
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
+
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.reveal);
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .set(this.DOM.revealInner, {x: '100%'})
+            .set(this.DOM.revealDeco, {transformOrigin: '100% 50%'})
+            .add(new TweenMax(this.DOM.revealDeco, 0.3, {
+                ease: Sine.easeInOut,
+                startAt: {scaleX: 0},
+                scaleX: 1
+            }), 'begin')
+            .set(this.DOM.revealDeco, {transformOrigin: '0% 50%'})
+            .add(new TweenMax(this.DOM.revealDeco, 0.6, {
+                ease: Expo.easeOut,
+                scaleX: 0
+            }), 'begin+=0.3')
+            .add(new TweenMax(this.DOM.revealInner, 0.6, {
+                ease: Expo.easeOut,
+                startAt: {x: '100%'},
+                x: '0%'
+            }), 'begin+=0.45')
+            .add(new TweenMax(this.DOM.revealImg, 0.6, {
+                ease: Expo.easeOut,
+                startAt: {x: '-100%'},
+                x: '0%'
+            }), 'begin+=0.45')
+            .add(new TweenMax(this.DOM.revealImg, 1.6, {
+                ease: Expo.easeOut,
+                startAt: {scale: 1.3},
+                scale: 1
+            }), 'begin+=0.45')
+            .add(new TweenMax(this.DOM.reveal, 0.8, {
+                ease: Quint.easeOut,
+                startAt: {x: '20%', rotation: 10},
+                x: '0%',
+                rotation: 0
+            }), 'begin');
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.reveal);
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealInner, 0.1, {
+                ease: Sine.easeOut,
+                x: '-100%'
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.1, {
+                ease: Sine.easeOut,
+                x: '100%'
+            }), 'begin')
+        }
+    }
+
+    // Effect 6
+    class HoverImgFx6 {
+        constructor(el) {
+            this.DOM = {el: el};
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__deco"></div><div class="hover-reveal__inner"><div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealInner = this.DOM.reveal.querySelector('.hover-reveal__inner');
+            this.DOM.revealDeco = this.DOM.reveal.querySelector('.hover-reveal__deco');
+            this.DOM.revealImg = this.DOM.revealInner.querySelector('.hover-reveal__img');
+            this.rect = this.DOM.reveal.getBoundingClientRect();
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x-this.rect.width-20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+            window.addEventListener('resize', () => this.rect = this.DOM.reveal.getBoundingClientRect());
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.reveal);
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .set(this.DOM.revealInner, {opacity: 0})
+            .set(this.DOM.revealDeco, {transformOrigin: '-5% 50%'})
+            .add(new TweenMax(this.DOM.revealDeco, 0.2, {
+                ease: Quad.easeInOut,
+                startAt: {scaleX: 0},
+                scaleX: 1,
+                scaleY: 0.8
+            }), 'begin')
+            .set(this.DOM.revealDeco, {transformOrigin: '105% 50%'})
+            .add(new TweenMax(this.DOM.revealDeco, 0.3, {
+                ease: Sine.easeOut,
+                scaleX: 0,
+                scaleY: 1
+            }), 'begin+=0.2')
+            .add(new TweenMax(this.DOM.revealInner, 0.9, {
+                ease: Elastic.easeOut.config(1,0.6),
+                startAt: {scale: 0, opacity: 1, x: '0%'},
+                scale: 1,
+            }), 'begin+=0.4')
+            .add(new TweenMax(this.DOM.revealImg, 0.8, {
+                ease: Expo.easeOut,
+                rotation: -15,
+            }), 'begin')
+            .add(new TweenMax(this.DOM.reveal, 1.1, {
+                ease: Quint.easeOut,
+                startAt: {x: '-50%', y: '10%', rotation: -35},
+                x: '0%',
+                y: '0%',
+                rotation: 15
+            }), 'begin');
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.reveal);
+            TweenMax.killTweensOf(this.DOM.revealInner);
+            TweenMax.killTweensOf(this.DOM.revealImg);
+            TweenMax.killTweensOf(this.DOM.revealDeco);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add(new TweenMax(this.DOM.revealInner, 0.13, {
+                ease: Sine.easeOut,
+                scale: 0.8,
+                opacity: 0
+            }));
+        }
+        animateLetters() {
+            TweenMax.set(this.DOM.letters, {opacity: 0});
+            TweenMax.staggerTo(this.DOM.letters, 1.5, {
+                ease: Elastic.easeOut.config(1,0.4),
+                startAt: {y: '50%'},
+                y: '0%',
+                opacity: 1
+            }, 0.02);
+        }
+    }
+
+    // Effect 7
+    class HoverImgFx7 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.style.zIndex = -1;
+            this.totalImages = 3;
+            let inner = '';
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                inner += `<div class="hover-reveal__img" style="position: absolute; background-image:url(${this.DOM.el.dataset.img})"></div>`;
+            }
+            this.DOM.reveal.innerHTML = inner;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealImgs = Array.from(this.DOM.reveal.querySelectorAll('.hover-reveal__img'));
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        position() {
+            this.rect = this.DOM.el.getBoundingClientRect();
+            this.DOM.reveal.style.top = `${this.rect.top - this.DOM.reveal.offsetHeight/2}px`;
+            this.DOM.reveal.style.left = `${this.rect.left - this.DOM.reveal.offsetWidth/2}px`;
+        }
+        initEvents() {
+            this.mouseenterFn = () => {
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.position();
+            
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                }
+            })
+            .set([this.DOM.revealImgs], {opacity: 0})
+
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                this.tl.add(new TweenMax(this.DOM.revealImgs[i], 0.7, {
+                    ease: i === this.totalImages-1 ? Expo.easeOut : Quint.easeOut,
+                    startAt: {x: '30%', y: '160%', rotation: i === this.totalImages-1 ? -30 : -10},
+                    x: i === this.totalImages-1 ? '10%' : '-15%',
+                    y: i === this.totalImages-1 ? '10%' : '-140%',
+                    rotation: -10
+                }), i*0.2);
+                this.tl.add(new TweenMax(this.DOM.revealImgs[i], 0.5, {
+                    ease: Quad.easeOut,
+                    startAt: {opacity: 1},
+                    opacity: i === this.totalImages-1 ? 1 : 0
+                }), i*0.2);
+            }
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.tl = new TimelineMax({
+                onComplete: () => {
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add(new TweenMax(this.DOM.revealImgs[this.totalImages-1], 0.15, {
+                ease: Sine.easeOut,
+                x: '-30%',
+                y: '-240%',
+                opacity: 0
+            }))
+        }
+        animateLetters() {
+            this.DOM.letters.forEach((letter) => {
+                TweenMax.to(letter, 1, {
+                    ease: Expo.easeOut,
+                    startAt: {y: Math.round(Math.random()) === 0 ? '100%' : '0%', opacity: 0},
+                    y: '0%',
+                    opacity: 1
+                });
+            });
+        }
+    }
+
+    // Effect 8
+    class HoverImgFx8 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.totalImages = 5;
+            let inner = '';
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                inner += `<div class="hover-reveal__img" style="position: absolute; background-image:url(${this.DOM.el.dataset.img})"></div>`;
+            }
+            this.DOM.reveal.innerHTML = inner;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealImgs = Array.from(this.DOM.reveal.querySelectorAll('.hover-reveal__img'));
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.animateLetters();
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .set([this.DOM.revealImgs], {opacity: 0});
+
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                TweenMax.set(this.DOM.revealImgs[i], {x: `${(this.totalImages-1-i)*5}%`, y: `${(this.totalImages-1-i)*10}%`});
+                
+                this.tl.add(new TweenMax(this.DOM.revealImgs[i], i === this.totalImages-1 ? 1.2 : 0.55, {
+                    ease: i === this.totalImages-1 ? Quint.easeOut : Quad.easeOut,
+                    startAt: i === this.totalImages-1 ? {opacity: 1, x: '5%', y: '10%'} : {opacity: 1},
+                    opacity: i === this.totalImages-1 ? 1 : 0,
+                    x: i === this.totalImages-1 ? '0%' : null,
+                    y: i === this.totalImages-1 ? '0%' : null
+                }), i*0.04);
+            }
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add(new TweenMax(this.DOM.revealImgs[this.totalImages-1], 0.15, {
+                ease: Sine.easeOut,
+                opacity: 0
+            }))
+        }
+        animateLetters() {
+            this.DOM.letters.forEach((letter) => {
+                TweenMax.to(letter, 1, {
+                    ease: Expo.easeOut,
+                    startAt: Math.round(Math.random()) === 0 ? {x: '100%', y: '100%', opacity: 0} : {opacity: 0},
+                    x: '0%',
+                    y: '0%',
+                    opacity: 1
+                });
+            });
+        }
+    }
+
+    // Effect 9
+    class HoverImgFx9 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.totalImages = 10;
+            let inner = '';
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                inner += i === this.totalImages-1 ? `<div class="hover-reveal__img" style="position: absolute; background-image:url(${this.DOM.el.dataset.img})"></div>` :
+                                                    `<div class="hover-reveal__img" style="filter: hue-rotate(60deg) saturate(5); position: absolute; background-image:url(${this.DOM.el.dataset.img})"></div>`;
+            }
+            this.DOM.reveal.innerHTML = inner;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealImgs = Array.from(this.DOM.reveal.querySelectorAll('.hover-reveal__img'));
+            charming(this.DOM.el);
+            this.DOM.letters = Array.from(this.DOM.el.querySelectorAll('span'));
+            this.letterColor = getComputedStyle(this.DOM.el).color;
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+                this.animateLetters();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .set([this.DOM.revealImgs], {opacity: 0});
+            for (let i = 0; i <= this.totalImages-1; ++i) {
+                TweenMax.set(this.DOM.revealImgs[i], {
+                    x: i === this.totalImages-1 ? '0%' : `${getRandomFloat(-5,5)}%`, 
+                    y: i === this.totalImages-1 ? '0%' : `${getRandomFloat(-5,5)}%`
+                });
+                
+                this.tl.add(new TweenMax(this.DOM.revealImgs[i], 0.25, {
+                    ease: Quad.easeOut,
+                    startAt: {opacity: 1},
+                    opacity: i === this.totalImages-1 ? 1 : 0
+                }), i*0.04);
+            }
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealImgs);
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add(new TweenMax(this.DOM.revealImgs[this.totalImages-1], 0.15, {
+                ease: Sine.easeOut,
+                opacity: 0
+            }))
+        }
+        animateLetters() {
+            const setColor = letter => TweenMax.set(letter, {
+                color: ['#fff', '#0ff', '#f0f'][parseInt(getRandomFloat(0,3))],
+                opacity: Math.round(Math.random()) === 0 ? 1 : 0
+            });
+            this.DOM.letters.forEach((letter) => {
+                TweenMax.to(letter, 0.1, {
+                    ease: Expo.easeOut,
+                    onStart: () => setColor(letter),
+                    onRepeat: () => setColor(letter),
+                    startAt: {x: `${getRandomFloat(-50,50)}%`, y: `${getRandomFloat(-50,50)}%`},
+                    x: '0%',
+                    y: '0%',
+                    repeat: 3,
+                    onComplete: () => TweenMax.set(letter, {color: this.letterColor, opacity: 1}),
+                });
+            });
+        }
+    }
+
+    // Effect 10
+    class HoverImgFx10 {
+        constructor(el) {
+            this.DOM = {el: el};
+            
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            let inner = '';
+            const imgsArr = this.DOM.el.dataset.img.split(',');
+            for (let i = 0, len = imgsArr.length; i <= len-1; ++i ) {
+                inner += `<div class="hover-reveal__img" style="transform-origin:0% 0%;opacity:0;position:absolute;background-image:url(${imgsArr[i]})"></div>`;
+            }
+            this.DOM.reveal.innerHTML = inner;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealImgs = Array.from(this.DOM.reveal.querySelectorAll('.hover-reveal__img'));
+            this.imgsTotal = this.DOM.revealImgs.length;
+
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            this.DOM.reveal.style.opacity = 1;
+            TweenMax.set(this.DOM.el, {zIndex: 1000});
+            TweenMax.set(this.DOM.revealImgs, {opacity: 0});
+
+            const show = () => {
+                TweenMax.killTweensOf(this.DOM.revealImgs[this.current]);
+                TweenMax.set(this.DOM.revealImgs[this.current], {zIndex: 1000});
+                TweenMax.to(this.DOM.revealImgs[this.current], 0.4, {
+                    ease: Quint.easeOut,
+                    startAt: {opacity: 0, scale: 0.5, rotation: -15, x: '0%', y: '-10%'},
+                    opacity: 1,
+                    y: '0%',
+                    rotation: 0,
+                    scale: 1
+                });
+            };
+            this.current = 0;
+            show();
+            
+            const loop = () => {
+                this.imgtimeout = setTimeout(() => {
+                    this.DOM.revealImgs[this.current].style.zIndex = '';
+                    TweenMax.to(this.DOM.revealImgs[this.current], 0.8, {
+                        ease: Expo.easeOut,
+                        x: `${getRandomFloat(-10,10)}%`,
+                        y: `${getRandomFloat(10,60)}%`,
+                        rotation: getRandomFloat(5,15),
+                        opacity: 0
+                    });
+                    this.current= this.current < this.imgsTotal-1 ? this.current+1 : 0;
+                    show();
+                    loop();
+                }, 500);
+            }
+            loop();
+        }
+        hideImage() {
+            clearTimeout(this.imgtimeout);
+            this.DOM.revealImgs[this.current].style.zIndex = '';
+            this.DOM.revealImgs[this.current].style.opacity = 0;
+            this.current = 0;
+            TweenMax.set(this.DOM.el, {zIndex: ''});
+            TweenMax.set(this.DOM.reveal, {opacity: 0})
+        }
+    }
+	
+    // Effect 11
+    class HoverImgFx11 {
+        constructor(el) {
+            this.DOM = {el: el};
+            this.DOM.reveal = document.createElement('div');
+            this.DOM.reveal.className = 'hover-reveal';
+            this.DOM.reveal.innerHTML = `<div class="hover-reveal__img" style="background-image:url(${this.DOM.el.dataset.img})"></div>`;
+            this.DOM.el.appendChild(this.DOM.reveal);
+            this.DOM.revealImg = this.DOM.reveal.querySelector('.hover-reveal__img');
+
+            this.initEvents();
+        }
+        initEvents() {
+            this.positionElement = (ev) => {
+                const mousePos = getMousePos(ev);
+                const docScrolls = {
+                    left : document.body.scrollLeft + document.documentElement.scrollLeft, 
+                    top : document.body.scrollTop + document.documentElement.scrollTop
+                };
+                this.DOM.reveal.style.top = `${mousePos.y+20-docScrolls.top}px`;
+                this.DOM.reveal.style.left = `${mousePos.x+20-docScrolls.left}px`;
+            };
+            this.mouseenterFn = (ev) => {
+                this.positionElement(ev);
+                this.showImage();
+            };
+            this.mousemoveFn = ev => requestAnimationFrame(() => {
+                this.positionElement(ev);
+            });
+            this.mouseleaveFn = () => {
+                this.hideImage();
+            };
+            
+            this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+            this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
+            this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        }
+        showImage() {
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    this.DOM.reveal.style.opacity = 1;
+                    TweenMax.set(this.DOM.el, {zIndex: 1000});
+                }
+            })
+            .add('begin')
+            .set(this.DOM.revealImg, {transformOrigin: '95% 50%', x: '100%'})
+            .add(new TweenMax(this.DOM.revealImg, 0.2, {
+                ease: Sine.easeOut,
+                startAt: {scaleX: 0.5, scaleY: 1},
+                scaleX: 1.5,
+                scaleY: 0.7,
+                //opacity: 0.8
+            }), 'begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.8, {
+                ease: Expo.easeOut,
+                startAt: {rotation: 10, y: '5%', opacity: 0},
+                rotation: 0,
+                y: '0%',
+                opacity: 1
+            }), 'begin')
+            .set(this.DOM.revealImg, {transformOrigin: '0% 50%'})
+            .add(new TweenMax(this.DOM.revealImg, 0.6, {
+                ease: Expo.easeOut,
+                scaleX: 1,
+                scaleY: 1,
+                opacity: 1
+            }), 'begin+=0.2')
+            .add(new TweenMax(this.DOM.revealImg, 0.6, {
+                ease: Expo.easeOut,
+                x: '0%'
+            }), 'begin+=0.2')
+        }
+        hideImage() {
+            TweenMax.killTweensOf(this.DOM.revealImg);
+
+            this.tl = new TimelineMax({
+                onStart: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: 999});
+                },
+                onComplete: () => {
+                    TweenMax.set(this.DOM.el, {zIndex: ''});
+                    TweenMax.set(this.DOM.reveal, {opacity: 0});
+                }
+            })
+            .add('begin')
+            .add(new TweenMax(this.DOM.revealImg, 0.2, {
+                ease: Sine.easeOut,
+                opacity: 0,
+                x: '-20%'
+            }), 'begin');
+        }
+    }
+
+    Array.from(document.querySelectorAll('[data-fx="1"] > a, a[data-fx="1"]')).forEach(link => new HoverImgFx1(link));
+    Array.from(document.querySelectorAll('[data-fx="2"] > a, a[data-fx="2"]')).forEach(link => new HoverImgFx2(link));
+    Array.from(document.querySelectorAll('[data-fx="3"] > a, a[data-fx="3"]')).forEach(link => new HoverImgFx3(link));
+    Array.from(document.querySelectorAll('[data-fx="4"] > a, a[data-fx="4"]')).forEach(link => new HoverImgFx4(link));
+    Array.from(document.querySelectorAll('[data-fx="5"] > a, a[data-fx="5"]')).forEach(link => new HoverImgFx5(link));
+    Array.from(document.querySelectorAll('[data-fx="6"] > a, a[data-fx="6"]')).forEach(link => new HoverImgFx6(link));
+    Array.from(document.querySelectorAll('[data-fx="7"] > a, a[data-fx="7"]')).forEach(link => new HoverImgFx7(link));
+    Array.from(document.querySelectorAll('[data-fx="8"] > a, a[data-fx="8"]')).forEach(link => new HoverImgFx8(link));
+    Array.from(document.querySelectorAll('[data-fx="9"] > a, a[data-fx="9"]')).forEach(link => new HoverImgFx9(link));
+    Array.from(document.querySelectorAll('[data-fx="10"] > a, a[data-fx="10"]')).forEach(link => new HoverImgFx10(link));
+    Array.from(document.querySelectorAll('[data-fx="11"] > a, a[data-fx="11"]')).forEach(link => new HoverImgFx11(link));
+
+    
+    // Demo purspose only: Preload all the images in the page..
+    const contentel = document.querySelector('.content');
+    Array.from(document.querySelectorAll('.block__title, .block__link, .content__text-link')).forEach((el) => {
+        const imgsArr = el.dataset.img.split(',');
+        for (let i = 0, len = imgsArr.length; i <= len-1; ++i ) {
+            const imgel = document.createElement('img');
+            imgel.style.visibility = 'hidden';
+            imgel.style.width = 0;
+            imgel.src = imgsArr[i];
+            imgel.className = 'preload';
+            contentel.appendChild(imgel);
+        }
+    });
+    imagesLoaded(document.querySelectorAll('.preload'), () => document.body.classList.remove('loading'));
 }
