@@ -1,661 +1,355 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
-
+<html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Inline Menu Layout with Page Animation | Codrops</title>
-	<meta name="description" content="An inline menu layout with a playful hover animation and a gallery content preview panel.">
-	<meta name="keywords" content="layout, web design, html, animation, hover effect, menu, gallery layout, css">
-	<meta name="author" content="Codrops">
-	<link rel="shortcut icon" href="favicon.26242483.ico">
-	<link rel="stylesheet" href="https://use.typekit.net/zkq2mjw.css">
-	<link rel="stylesheet" type="text/css" href="base.98fd6c19.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-	<script>document.documentElement.className = "js";
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-var supportsCssVars = function supportsCssVars() {
-  var e,
-      t = document.createElement("style");
-  return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e;
-};
+  <title>Kristen Khong | UX Designer</title>
+  <link rel="stylesheet" href="https://use.typekit.net/gll7dfd.css">
+  <link rel="shortcut icon" href="/favicon.26242483.ico">
+<link rel="stylesheet" href="/src.e31bb0bc.css"></head>
+<body>
+  <div class="app">
+    <main>
+      <!-- <button type="button" class="button-slider-open js-slider-open">
+        hover
+      </button> -->
 
-supportsCssVars() || alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
-<link rel="stylesheet" href="js.00a46daa.css"></head>
+      <button class="button-slider-open js-slider-open" type="button" aria-label="button open slider">
+        <svg class="button-slider-open__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.68 11.617">
+          <path class="button-slider-open__icon-square" d="M2.636 11.617H.181A.177.177 0 010 11.436V8.981A.177.177 0 01.181 8.8h2.442a.177.177 0 01.181.181v2.442a.17.17 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M6.073 11.617H3.618a.177.177 0 01-.181-.181V8.981a.177.177 0 01.181-.181H6.06a.177.177 0 01.181.181v2.442a.178.178 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M9.51 11.617H7.055a.177.177 0 01-.181-.181V8.981a.177.177 0 01.181-.181h2.442a.177.177 0 01.181.181v2.442a.178.178 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M2.636 8.18H.181A.177.177 0 010 7.999V5.544a.177.177 0 01.181-.181h2.442a.177.177 0 01.181.181v2.442a.17.17 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M6.073 7.65H3.618a.177.177 0 01-.181-.181V5.014a.177.177 0 01.181-.181H6.06a.177.177 0 01.181.181v2.442a.178.178 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M9.51 6.849H7.055a.177.177 0 01-.181-.181V4.213a.177.177 0 01.181-.181h2.442a.177.177 0 01.181.181v2.442a.171.171 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M2.636 4.742H.181A.177.177 0 010 4.561V2.106a.177.177 0 01.181-.181h2.442a.177.177 0 01.181.181v2.442a.17.17 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M6.073 3.605H3.618a.177.177 0 01-.181-.181V.969a.177.177 0 01.181-.181H6.06a.177.177 0 01.181.181v2.442a.171.171 0 01-.168.194z"></path>
+          <path class="button-slider-open__icon-square" d="M9.51 2.8H7.055a.177.177 0 01-.181-.181V.181A.177.177 0 017.055 0h2.442a.177.177 0 01.181.181v2.442a.166.166 0 01-.168.177z"></path>
+        </svg>
+      </button>
 
-<body class="demo-1 loading">
-	<main>
-		<div class="frame frame--header">
-			<h1 class="frame__title">Inline Menu Layout</h1>
-			<div class="frame__links">
-				<a href="https://tympanus.net/Development/TileScroll/">Previous demo</a>
-				<a href="https://tympanus.net/codrops/?p=51858">Article</a>
-				<a href="https://github.com/codrops/InlineMenuLayout/">GitHub</a>
-			</div>
-			<button class="frame__menu">Menu</button>
-		</div>
-		<nav class="menu">
-			<a class="menu__item" data-img="img/1.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">sirens</span></span><sup class="menu__item-number">(5)</sup></a>
-			<a class="menu__item" data-img="img/6.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">convoys</span></span><sup class="menu__item-number">(4)</sup></a>
-			<a class="menu__item" data-img="img/10.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">screens</span></span><sup class="menu__item-number">(3)</sup></a>
-			<a class="menu__item" data-img="img/13.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">alloy</span></span><sup class="menu__item-number">(4)</sup></a>
-			<a class="menu__item" data-img="img/17.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">tv</span></span><sup class="menu__item-number">(4)</sup></a>
-			<a class="menu__item" data-img="img/21.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">lunatic</span></span><sup class="menu__item-number">(5)</sup></a>
-			<a class="menu__item" data-img="img/26.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">irresistible</span></span><sup class="menu__item-number">(6)</sup></a>
-			<a class="menu__item" data-img="img/32.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">frontiers</span></span><sup class="menu__item-number">(3)</sup></a>
-			<a class="menu__item" data-img="img/35.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">barrage</span></span><sup class="menu__item-number">(4)</sup></a>
-			<a class="menu__item" data-img="img/39.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">moet</span></span><sup class="menu__item-number">(5)</sup></a>
-			<a class="menu__item" data-img="img/4.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">rubber</span></span><sup class="menu__item-number">(3)</sup></a>
-			<a class="menu__item" data-img="img/7.jpg"><span class="menu__item-inner-wrap"><span class="menu__item-inner">handy</span></span><sup class="menu__item-number">(4)</sup></a>
-		</nav>
-		<section class="content-wrap">
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">sirens</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(1.dc197a9a.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Girl in pink</h3>
-							<p class="gallery__item-meta">2016, Paris</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(2.3ca6bb44.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Overdose</h3>
-							<p class="gallery__item-meta">2015, Bologna</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(3.a433b89d.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Premiere</h3>
-							<p class="gallery__item-meta">2014, Brno</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(4.c6d96be5.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">face paint</h3>
-							<p class="gallery__item-meta">2011, Copenhagen</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(5.689b68fd.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Recursive</h3>
-							<p class="gallery__item-meta">2010, Berlin</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">convoys</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(6.e96dcfff.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Fantasia</h3>
-							<p class="gallery__item-meta">2015, Rome</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(7.2d66e3ed.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Greenery</h3>
-							<p class="gallery__item-meta">2016, Berlin</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(8.f4323fe0.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Freaky</h3>
-							<p class="gallery__item-meta">2017, Davos</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(9.c9233dac.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Shannon</h3>
-							<p class="gallery__item-meta">2018, Sydney</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">screens</span></span>
-					<sup class="content__title-number">(3)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(10.5e22fdc3.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Big Ben</h3>
-							<p class="gallery__item-meta">2013, London</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(11.a56b8aeb.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Cranky</h3>
-							<p class="gallery__item-meta">2014, Budapest</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(12.b5a57fd7.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Love Horse</h3>
-							<p class="gallery__item-meta">2015, Belgrade</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">alloy</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(13.3858c623.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Lady Brown</h3>
-							<p class="gallery__item-meta">2001, Helsinki</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(14.c732d2b3.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">King Candy</h3>
-							<p class="gallery__item-meta">2003, Lisbon</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(15.61b13bcc.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">The Book</h3>
-							<p class="gallery__item-meta">2005, Toronto</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(16.39461312.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Corner</h3>
-							<p class="gallery__item-meta">2006, Dublin</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">tv</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(17.7c008703.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Fun fun fun</h3>
-							<p class="gallery__item-meta">2014, Moscow</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(18.81a1401f.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Lovelife</h3>
-							<p class="gallery__item-meta">2015, Shanghai</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(19.6d803788.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Woodland</h3>
-							<p class="gallery__item-meta">2016, Vienna</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(20.b400b781.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">No where</h3>
-							<p class="gallery__item-meta">2017, Bern</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">lunatic</span></span>
-					<sup class="content__title-number">(5)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(21.153c3a00.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Fantastic</h3>
-							<p class="gallery__item-meta">2013, Bangkok</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(22.787cf170.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Cutting Me</h3>
-							<p class="gallery__item-meta">2014, Florence</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(23.486b8c96.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Houseparty</h3>
-							<p class="gallery__item-meta">2015, Ljubljana</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(24.fff42ead.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Gnatus</h3>
-							<p class="gallery__item-meta">2016, Helsinki</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(25.4550eb4f.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">What?</h3>
-							<p class="gallery__item-meta">2017, Kiev</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">irresistible</span></span>
-					<sup class="content__title-number">(6)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(26.2e93c17c.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Handsome</h3>
-							<p class="gallery__item-meta">1998, Cologne</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(27.4a259712.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Quo Vadis?</h3>
-							<p class="gallery__item-meta">1999, Rome</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(28.1b075856.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Prime Time</h3>
-							<p class="gallery__item-meta">2000, Pasadena</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(29.474079f1.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Doom</h3>
-							<p class="gallery__item-meta">2001, Dublin</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(30.e673968d.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Algebra</h3>
-							<p class="gallery__item-meta">2002, Bukarest</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(31.dfbd55a8.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Freedom</h3>
-							<p class="gallery__item-meta">2003, Sarajevo</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">frontiers</span></span>
-					<sup class="content__title-number">(3)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(32.d054f62f.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Apples</h3>
-							<p class="gallery__item-meta">2019, Porto</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(33.7058d352.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Overdose</h3>
-							<p class="gallery__item-meta">2020, Barcelona</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(34.f8e0a6a3.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Removed</h3>
-							<p class="gallery__item-meta">2021, Osaka</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">barrage</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(35.e3312292.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Hard Candy</h3>
-							<p class="gallery__item-meta">2021, Agra</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(36.0448c5b0.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Longing</h3>
-							<p class="gallery__item-meta">2022, Las Vegas</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(37.49a0780f.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Free Fall</h3>
-							<p class="gallery__item-meta">2023, Pattaya</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(38.d80dd7b6.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Cracking</h3>
-							<p class="gallery__item-meta">2024, Seoul</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">moet</span></span>
-					<sup class="content__title-number">(5)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(39.f6a22a1b.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Equals</h3>
-							<p class="gallery__item-meta">2015, Tokyo</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(40.9f6d9012.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Forced</h3>
-							<p class="gallery__item-meta">2016, Melbourne</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(1.dc197a9a.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Shackles</h3>
-							<p class="gallery__item-meta">2017, London</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(2.3ca6bb44.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Unknown</h3>
-							<p class="gallery__item-meta">2018, Jerusalem</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(3.a433b89d.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Holy Spirit</h3>
-							<p class="gallery__item-meta">2019, Paris</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">rubber</span></span>
-					<sup class="content__title-number">(3)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(4.c6d96be5.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Just You</h3>
-							<p class="gallery__item-meta">2010, Detroit</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(5.689b68fd.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Splitting</h3>
-							<p class="gallery__item-meta">2011, Milan</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(6.e96dcfff.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Handy Hat</h3>
-							<p class="gallery__item-meta">2012, Jakarta</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<div class="content">
-				<h2 class="content__title">
-					<span class="content__title-wrap"><span class="content__title-inner">handy</span></span>
-					<sup class="content__title-number">(4)</sup>
-				</h2>
-				<div class="gallery">
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(7.2d66e3ed.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Hallo Friend</h3>
-							<p class="gallery__item-meta">2011, Frankfurt</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(8.f4323fe0.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Middle</h3>
-							<p class="gallery__item-meta">2012, Liverpool</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(9.c9233dac.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Location</h3>
-							<p class="gallery__item-meta">2013, Denver</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-					<figure class="gallery__item">
-						<div class="gallery__item-img">
-							<div class="gallery__item-imginner" style="background-image:url(10.5e22fdc3.jpg)"></div>
-						</div>
-						<figcaption class="gallery__item-caption">
-							<h3 class="gallery__item-title" data-splitting="">Heavy Womb</h3>
-							<p class="gallery__item-meta">2014, Manchester</p>
-							<button class="gallery__item-more">+</button>
-						</figcaption>
-					</figure>
-				</div>
-			</div>
-			<button class="back"><svg viewBox="0 0 60 34" width="30" height="17"><path d="M60 15.066H7.235L19.128 3.173 16.456.5 0 16.956 16.456 33.41l2.672-2.672L7.235 18.846H60z"></path></svg></button>
-		</section>
-		<div class="frame frame--footer">
-			<a class="frame__author" href="https://twitter.com/codrops">@codrops</a>
-			<p class="frame__credits">Inspired by this <a href="https://tympanus.net/codrops/?p=51858">Dribbble shot</a></p>
-		</div>
-	</main>
-	<svg class="cursor" width="30" height="30" viewBox="0 0 30 30">
-		<circle class="cursor__inner" cx="15" cy="15" r="7.5"></circle>
-	</svg>
-	<script src="js.00a46daa.js"></script>
+      <!-- CONTENT-->
+      <section class="content js-content">
+        <div class="container">
+          <div class="content__subheadings">
+             <!--<span class="content__subheading is-md">Let's connect</span>-->
+             <ul>
+              <li><a href="https://www.behance.net/KristenKhong" target="_blank">Behance</a></li>
+              <li><a href="https://dribbble.com/kristenkhong" target="_blank">Dribbble</a></li>
+              <li><a href="https://www.instagram.com/kristen.khong/" target="_blank">Instagram</a></li>
+              <li><a href="https://my.linkedin.com/in/kristenkhong" target="_blank">Linkedin</a></li>
+              <li><a href="/nestum-ask.html">test</a></li>
+              <li><a href="/emailform.html">COntact</a></li>
+            </ul>
+          </div>
+
+          <h2 class="content__heading">
+            Hello, <br>my name is Kristen Khong. <br>I'm a UX Designer.
+          </h2>
+        </div>
+      </section>
+      <!-- END CONTENT-->
+
+      <!-- PLACEHOLDERS -->
+      <div class="placeholders js-placeholders">
+        <div class="placeholders__img-wrap js-img-wrap" style="--aspect-ratio: 0.8;">
+          <img src="/jobstreet-thumb.5a751851.png" alt="JobStreet.com" class="placeholders__img">
+        </div>
+
+        <div class="placeholders__img-wrap js-img-wrap" style="--aspect-ratio: 0.8;">
+          <img src="/boozeat-thumb.f22de573.png" alt="Boozeat.com" class="placeholders__img">
+        </div>
+
+        <div class="placeholders__img-wrap js-img-wrap" style="--aspect-ratio: 0.8;">
+          <img src="/airasia-thumb.2b5c9644.png" alt="AirAsia" class="placeholders__img">
+        </div>
+      </div>
+      <!-- END PLACEHOLDERS -->
+
+      <!-- SLIDER -->
+      <div class="slider js-slider">
+        <button class="slider__button-close js-slider-close" type="button" aria-label="close slider">
+          <svg class="slider__button-close-icon js-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205 205">
+            <g class="js-circle" fill="none" stroke="var(--color-grey-darker)">
+              <circle cx="102.5" cy="102.5" r="102"></circle>
+            </g>
+            <g class="js-x" fill="none" stroke="var(--color-grey-darker)" stroke-linecap="round">
+              <path d="M94 94l16.139 16.139"></path>
+              <path d="M94 110.492l16.493-16.493"></path>
+            </g>
+          </svg>
+        </button>
+
+        <div class="slider__container js-container" data-scroll="">
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="/jobstreet-thumb.5a751851.png" alt="JobStreet.com" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Seek<br>Asia <!-- project-1 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button onclick="window.location.href='seekasia.html'" class="button slider__item-button js-button" type="button" data-slug="seekasia">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="/boozeat-thumb.f22de573.png" alt="Boozeat.com" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Boozeat <!-- project-2 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button onclick="window.location.href='#.html'" class="button slider__item-button js-button" type="button" data-slug="rouge">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="/airasia-thumb.2b5c9644.png" alt="AirAsia" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  AirAsia <!-- project-3 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button class="button slider__item-button js-button" type="button" data-slug="jaune">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="https://images.unsplash.com/photo-1541320823636-40247af897bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80&ar=0.8" alt="building" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Nespray <!-- project-4 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button class="button slider__item-button js-button" type="button" data-slug="orange">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="https://images.unsplash.com/photo-1566787020216-3e4f973ec5ec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80&ar=0.8" alt="building" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Castrol <!-- project-5 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button class="button slider__item-button js-button" type="button" data-slug="vert">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="https://images.unsplash.com/photo-1523181729404-8a3b7b6f918d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80&ar=0.8" alt="building" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Nando's <!-- project-6 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button class="button slider__item-button js-button" type="button" data-slug="bleu">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider__item js-item" style="--aspect-ratio: 0.8;">
+            <div class="slider__item-img-wrap js-img-wrap js-img" style="--aspect-ratio: 0.8;" data-building="building-slug" data-index="1">
+              <img src="https://images.unsplash.com/photo-1566688342604-dbe3e7357104?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80&ar=0.8" alt="building" class="slider__item-img">
+            </div>
+
+            <div class="slider__item-content">
+              <div class="slider__item-heading-wrap">
+                <h3 class="slider__item-heading js-heading">
+                  Dear Nestlé <!-- project-7 -->
+                </h3>
+              </div>
+
+              <div class="slider__item-button-wrap">
+                <button onclick="window.location.href='dear-nestle.html'" class="button slider__item-button js-button" type="button" data-slug="violet">
+                  <span class="button__title-mask">
+                    <div class="button__title-wrap">
+                      <span class="button__title">View project</span>
+                      <span class="button__title--secondary">View project</span>
+                    </div>
+                  </span>
+
+                  <span class="button__icon">
+                    <span class="button__circle"></span>
+                    <svg class="button__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                    <svg class="button__svg button__svg--clone" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.002 4.639">
+                      <path d="M.25 2.264h15.403"></path>
+                      <path d="M13.743.354l1.91 1.91-1.919 2.022"></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slider__progress-wrap js-progress-wrap">
+          <div class="slider__progress js-progress"></div>
+        </div>
+      </div>
+      <!-- END SLIDER -->
+    </main>
+  </div>
+
+  <script src="/src.e31bb0bc.js"></script>
 </body>
-
 </html>
