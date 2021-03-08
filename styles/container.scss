@@ -1,0 +1,23 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 0;
+  align-items: start;
+
+  position: relative;
+}
+
+.container.is-centered {
+  align-items: center;
+}
+
+ul li a {
+  text-decoration:none;
+  &:hover {
+    color: red;
+  }
+}
+
+a {
+  text-decoration:none;
+}
