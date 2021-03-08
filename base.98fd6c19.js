@@ -184,7 +184,12 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"css/base.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"./../assets/fonts/SaolDisplay-Regular.woff2":[["SaolDisplay-Regular.97c5bb7f.woff2","assets/fonts/SaolDisplay-Regular.woff2"],"assets/fonts/SaolDisplay-Regular.woff2"],"./../assets/fonts/SaolDisplay-Regular.woff":[["SaolDisplay-Regular.03cbf316.woff","assets/fonts/SaolDisplay-Regular.woff"],"assets/fonts/SaolDisplay-Regular.woff"],"./../img/1.jpg":[["1.dc197a9a.jpg","img/1.jpg"],"img/1.jpg"],"./../img/seek_1.png":[["seek_1.a6e11d11.png","img/seek_1.png"],"img/seek_1.png"],"./../img/seek_2.png":[["seek_2.ed5e1532.png","img/seek_2.png"],"img/seek_2.png"],"./../img/seek_3.png":[["seek_3.83165f4e.png","img/seek_3.png"],"img/seek_3.png"],"./../img/seek_4.png":[["seek_4.4d8210e6.png","img/seek_4.png"],"img/seek_4.png"],"./../img/seek_5.png":[["seek_5.c509709f.png","img/seek_5.png"],"img/seek_5.png"],"./../img/seek_6.png":[["seek_6.ef708e01.png","img/seek_6.png"],"img/seek_6.png"],"./../img/nestum_1.png":[["nestum_1.fe99cb86.png","img/nestum_1.png"],"img/nestum_1.png"],"./../img/nestum_2.png":[["nestum_2.0f2f9496.png","img/nestum_2.png"],"img/nestum_2.png"],"./../img/nestum_3.png":[["nestum_3.900fcc75.png","img/nestum_3.png"],"img/nestum_3.png"],"./../img/nestum_4.png":[["nestum_4.2bf02c12.png","img/nestum_4.png"],"img/nestum_4.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -389,4 +394,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/index.js.map
+//# sourceMappingURL=/base.98fd6c19.js.map
