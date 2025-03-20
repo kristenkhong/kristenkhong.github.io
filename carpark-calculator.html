@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midvalley Carpark Fee Calculator</title>
+    <style>
+        :root {
+            --primary: #2c6e49;
+            --secondary: #d90429;
+            --background: #f7f9f8;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 24px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-light);
+        }
+
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="time"]:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        #startButton {
+            background: var(--primary);
+            color: white;
+        }
+
+        #endButton {
+            background: var(--secondary);
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        button:not(:disabled):hover {
+            filter: brightness(110%);
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .result {
+            background: var(--background);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .result p {
+            margin: 12px 0;
+            font-size: 1.1rem;
+        }
+
+        .result span {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        #nextFee {
+            color: var(--secondary);
+        }
+
+        .rates-table {
+            background: var(--background);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .rates-table h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Midvalley Carpark Fee Calculator</h1>
+        
+        <div class="input-group">
+            <div class="input-field">
+                <label for="startTime">Start Time</label>
+                <input type="time" id="startTime" value="09:30">
+            </div>
+            <button id="startButton">Start</button>
+            <button id="endButton" disabled>End</button>
+        </div>
+
+        <div class="result">
+            <p>Current Fee: <span id="currentFee">RM 0.00</span></p>
+            <p>Parking Duration: <span id="timeElapsed">Not started</span></p>
+            <p>Next Fee: <span id="nextFee">RM 0.00 at --:--</span></p>
+        </div>
+
+        <div class="rates-table">
+            <h3>Weekday Parking Rates</h3>
+            <table>
+                <tr>
+                    <th>Duration</th>
+                    <th>Rate</th>
+                </tr>
+                <tr>
+                    <td>First 3 Hours</td>
+                    <td>RM 2.00</td>
+                </tr>
+                <tr>
+                    <td>3rd - 4th Hour</td>
+                    <td>RM 1.00</td>
+                </tr>
+                <tr>
+                    <td>Subsequent Hours</td>
+                    <td>RM 2.50/hour</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let parkingStarted = false;
+        let parkingEnded = false;
+        let startDateTime = null;
+        let endDateTime = null;
+        let intervalId = null;
+
+        function calculateParkingFee(start, end, forNext = false) {
+            if (!parkingStarted) return { fee: '0.00', hours: 0, minutes: 0, nextTime: null };
+
+            const endTime = parkingEnded ? end : new Date();
+            const diffMs = endTime - start;
+            const diffMins = Math.floor(diffMs / 60000);
+            let hours = Math.floor(diffMins / 60);
+            const minutes = diffMins % 60;
+
+            let nextTime = null;
+            if (forNext && !parkingEnded) {
+                const nextHourMs = start.getTime() + ((hours + 1) * 60 * 60 * 1000);
+                nextTime = new Date(nextHourMs);
+                hours += 1;
+            }
+
+            let fee = 0;
+            if (hours <= 3) {
+                fee = 2;
+            } else if (hours <= 4) {
+                fee = 2 + 1;
+            } else {
+                fee = 2 + 1 + (hours - 4) * 2.5;
+            }
+
+            return {
+                fee: fee.toFixed(2),
+                hours,
+                minutes,
+                nextTime
+            };
+        }
+
+        function formatTime(date) {
+            if (!date) return '--:--';
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        function updateDisplay() {
+            const currentResult = calculateParkingFee(startDateTime, endDateTime);
+            const nextResult = calculateParkingFee(startDateTime, endDateTime, true);
+            
+            document.getElementById('currentFee').textContent = `RM ${currentResult.fee}`;
+            document.getElementById('timeElapsed').textContent = 
+                !parkingStarted ? 'Not started' : 
+                `${currentResult.hours} hours ${currentResult.minutes} minutes${parkingEnded ? ' (Final)' : ''}`;
+            document.getElementById('nextFee').textContent = 
+                !parkingStarted || parkingEnded ? 'RM 0.00 at --:--' : 
+                `RM ${nextResult.fee} at ${formatTime(nextResult.nextTime)}`;
+        }
+
+        document.getElementById('startButton').addEventListener('click', () => {
+            if (!parkingStarted) {
+                const startTime = document.getElementById('startTime').value;
+                const [hours, minutes] = startTime.split(':');
+                startDateTime = new Date();
+                startDateTime.setHours(parseInt(hours));
+                startDateTime.setMinutes(parseInt(minutes));
+                
+                parkingStarted = true;
+                document.getElementById('startButton').textContent = 'Started';
+                document.getElementById('startButton').disabled = true;
+                document.getElementById('endButton').disabled = false;
+                
+                if (intervalId) clearInterval(intervalId);
+                intervalId = setInterval(updateDisplay, 60000);
+                updateDisplay();
+            }
+        });
+
+        document.getElementById('endButton').addEventListener('click', () => {
+            if (parkingStarted && !parkingEnded) {
+                parkingEnded = true;
+                endDateTime = new Date();
+                clearInterval(intervalId);
+                document.getElementById('endButton').textContent = 'Ended';
+                document.getElementById('endButton').disabled = true;
+                updateDisplay();
+            }
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
