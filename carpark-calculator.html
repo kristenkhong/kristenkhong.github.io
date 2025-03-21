@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midvalley Carpark Fee Calculator</title>
+    <!-- Meta Tags for SEO and Social Sharing -->
+    <meta name="description" content="Calculate parking fees for Midvalley Carpark easily with real-time updates.">
+    <meta name="keywords" content="Midvalley, carpark, parking calculator, parking fees, weekday rates">
+    <meta name="author" content="Kristen Khong">
+    <meta property="og:title" content="Midvalley Carpark Fee Calculator">
+    <meta property="og:description" content="Easily calculate your parking fees for Midvalley Carpark with this simple tool.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kristenkhong.github.io/carpark-calculator/">
+    <meta property="og:image" content="https://kristenkhong.github.io/carpark-calculator/favicon.ico">
+    <!-- Favicon (Carpark Emoji as Data URL) -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn5i2PC90ZXh0Pjwvc3ZnPg==">
     <style>
         :root {
             --primary: #2c6e49;
@@ -235,23 +246,76 @@
             const minutes = diffMins % 60;
 
             let nextTime = null;
-            if (forNext && !parkingEnded) {
-                const nextHourMs = start.getTime() + ((hours + 1) * 60 * 60 * 1000);
-                nextTime = new Date(nextHourMs);
-                hours += 1;
-            }
+            let nextHours = hours;
 
+            // Current Fee calculation
             let fee = 0;
             if (hours <= 3) {
-                fee = 2;
+                fee = 2; // First 3 Hours
             } else if (hours <= 4) {
-                fee = 2 + 1;
+                fee = 2 + 1; // 3rd - 4th Hour
             } else {
-                fee = 2 + 1 + (hours - 4) * 2.5;
+                fee = 2 + 1 + (hours - 4) * 2.5; // Subsequent Hours
+            }
+
+            // Next Fee logic based on fee increase milestones
+            if (forNext && !parkingEnded) {
+                if (hours < 3) {
+                    nextHours = 3; // Next fee increase at 3 hours (RM 2.00)
+                    const nextThreeHourMs = start.getTime() + (3 * 60 * 60 * 1000);
+                    nextTime = new Date(nextThreeHourMs);
+                } else if (hours < 4) {
+                    nextHours = 4; // Next fee increase at 4 hours (RM 3.00)
+                    const nextFourHourMs = start.getTime() + (4 * 60 * 60 * 1000);
+                    nextTime = new Date(nextFourHourMs);
+                } else {
+                    nextHours = hours + 1; // Subsequent hours, fee increases by RM 2.50 each hour
+                    const nextHourMs = start.getTime() + ((hours + 1) * 60 * 60 * 1000);
+                    nextTime = new Date(nextHourMs);
+                }
+
+                // Calculate initial nextFee
+                let nextFee = 0;
+                if (nextHours <= 3) {
+                    nextFee = 2; // First 3 Hours
+                } else if (nextHours <= 4) {
+                    nextFee = 2 + 1; // 3rd - 4th Hour
+                } else {
+                    nextFee = 2 + 1 + (nextHours - 4) * 2.5; // Subsequent Hours
+                }
+
+                // If current fee equals next fee, skip to the next increase
+                if (parseFloat(fee) === nextFee) {
+                    if (hours < 3) {
+                        nextHours = 4; // Skip to 4 hours (RM 3.00)
+                        const nextFourHourMs = start.getTime() + (4 * 60 * 60 * 1000);
+                        nextTime = new Date(nextFourHourMs);
+                        nextFee = 3; // RM 3.00
+                    } else if (hours < 4) {
+                        nextHours = 5; // Skip to 5 hours (RM 5.50)
+                        const nextFiveHourMs = start.getTime() + (5 * 60 * 60 * 1000);
+                        nextTime = new Date(nextFiveHourMs);
+                        nextFee = 2 + 1 + (5 - 4) * 2.5; // RM 5.50
+                    } else {
+                        nextHours += 1; // Already hourly, just move to next hour
+                        const nextNextHourMs = start.getTime() + (nextHours * 60 * 60 * 1000);
+                        nextTime = new Date(nextNextHourMs);
+                        nextFee = 2 + 1 + (nextHours - 4) * 2.5;
+                    }
+                }
+
+                return {
+                    fee: fee.toFixed(2),
+                    nextFee: nextFee.toFixed(2),
+                    hours,
+                    minutes,
+                    nextTime
+                };
             }
 
             return {
                 fee: fee.toFixed(2),
+                nextFee: '0.00', // Default for non-forNext case
                 hours,
                 minutes,
                 nextTime
@@ -260,9 +324,11 @@
 
         function formatTime(date) {
             if (!date) return '--:--';
-            const hours = date.getHours().toString().padStart(2, '0');
+            const hours = date.getHours();
             const minutes = date.getMinutes().toString().padStart(2, '0');
-            return `${hours}:${minutes}`;
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            return `${formattedHours}:${minutes} ${ampm}`;
         }
 
         function updateDisplay() {
@@ -272,29 +338,28 @@
             document.getElementById('currentFee').textContent = `RM ${currentResult.fee}`;
             document.getElementById('timeElapsed').textContent = 
                 !parkingStarted ? 'Not started' : 
-                `${currentResult.hours} hours ${currentResult.minutes} minutes${parkingEnded ? ' (Final)' : ''}`;
+                `${currentResult.hours} hours ${currentResult.minutes} minutes${parkingEnded ? ' (Completed)' : ''}`;
             document.getElementById('nextFee').textContent = 
                 !parkingStarted || parkingEnded ? 'RM 0.00 at --:--' : 
-                `RM ${nextResult.fee} at ${formatTime(nextResult.nextTime)}`;
+                `RM ${nextResult.nextFee} at ${formatTime(nextResult.nextTime)}`;
         }
 
         document.getElementById('startButton').addEventListener('click', () => {
-            if (!parkingStarted) {
-                const startTime = document.getElementById('startTime').value;
-                const [hours, minutes] = startTime.split(':');
-                startDateTime = new Date();
-                startDateTime.setHours(parseInt(hours));
-                startDateTime.setMinutes(parseInt(minutes));
-                
-                parkingStarted = true;
-                document.getElementById('startButton').textContent = 'Started';
-                document.getElementById('startButton').disabled = true;
-                document.getElementById('endButton').disabled = false;
-                
-                if (intervalId) clearInterval(intervalId);
-                intervalId = setInterval(updateDisplay, 60000);
-                updateDisplay();
-            }
+            const startTime = document.getElementById('startTime').value;
+            const [hours, minutes] = startTime.split(':');
+            startDateTime = new Date();
+            startDateTime.setHours(parseInt(hours));
+            startDateTime.setMinutes(parseInt(minutes));
+            
+            parkingStarted = true;
+            parkingEnded = false; // Reset ended state if restarting
+            endDateTime = null;   // Clear end time
+            document.getElementById('endButton').disabled = false;
+            document.getElementById('endButton').textContent = 'End'; // Reset End button text
+            
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(updateDisplay, 60000);
+            updateDisplay();
         });
 
         document.getElementById('endButton').addEventListener('click', () => {
