@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kristen Khong | Play</title>
+<meta name="description" content="A collection of side projects, experiments, and web apps built for fun.">
+<meta property="og:title" content="Kristen Khong | Play">
+<meta property="og:description" content="A collection of side projects, experiments, and web apps built for fun.">
+<meta property="og:image" content="meta-tag.png">
+<meta property="og:url" content="https://kristenkhong.github.io/play.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,600;1,9..144,420&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F0EA;
+    --paper-alt:#E7E4DA;
+    --ink:#15171A;
+    --muted:#6B6A62;
+    --line:#D6D2C6;
+    --forest:#243C2E;
+    --forest-soft:#F0E8DE;
+    --brass:#A9822B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 40px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(241,240,234,.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:22px; padding-bottom:22px;
+  }
+  .wordmark{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:19px;
+    letter-spacing:-.01em;
+  }
+  .navlinks{display:flex; gap:36px; align-items:center;}
+  .navlinks a{
+    font-size:13px; font-weight:500; color:var(--ink);
+    padding-bottom:2px; border-bottom:1px solid transparent;
+    transition:border-color .15s ease;
+  }
+  .navlinks a:hover{border-color:var(--forest);}
+
+  /* ===== HERO ===== */
+  header.hero{padding:96px 0 84px; border-bottom:1px solid var(--line);}
+  .hero-grid{display:grid; grid-template-columns:1fr; gap:60px;}
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:480;
+    font-size:clamp(38px, 5vw, 62px);
+    line-height:1.08;
+    letter-spacing:-.015em;
+    max-width: 800px;
+  }
+  .hero h1 em{
+    font-style:italic; font-weight:420; color:var(--forest);
+  }
+
+  /* ===== WORK LIST (APPS) ===== */
+  section.work{padding:90px 0; border-bottom:1px solid var(--line);}
+  .work-row{
+    display:grid; grid-template-columns:1fr auto;
+    align-items:center; gap:28px;
+    padding:28px 0; border-top:1px solid var(--line);
+    transition:background .15s ease;
+  }
+  .work-row:last-child{border-bottom:1px solid var(--line);}
+  .work-row:hover{background:var(--paper-alt);}
+  .work-title{font-family:'Fraunces', serif; font-size:23px; font-weight:500;}
+  .work-sub{color:var(--muted); font-size:13.5px; margin-top:4px;}
+  .work-link{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:600;
+    border-bottom:1px solid var(--ink); padding-bottom:2px;
+  }
+
+  /* ===== CONTACT ===== */
+  footer.contact{
+    padding:100px 0 60px;
+    color:var(--forest-soft);
+    background:var(--forest);
+    transition:background .35s ease;
+  }
+  footer.contact.footer-animate{
+    background:linear-gradient(-45deg, #243C2E, #8C3B2E, #8A5A1E, #1F5C52, #33326E, #6E2F52, #243C2E);
+    background-size:600% 600%;
+    animation:footerColor 24s ease infinite;
+    transition:none;
+  }
+  @keyframes footerColor{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  footer.contact .wrap{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:40px;}
+  footer.contact h2{
+    font-family:'Fraunces', serif; font-size:clamp(30px,4vw,48px); font-weight:460;
+    max-width:560px; line-height:1.15; letter-spacing:-.01em;
+  }
+  footer.contact .cta-btn{
+    display:inline-block; margin-top:28px; padding:14px 26px;
+    border:1px solid var(--forest-soft); font-size:13px; font-weight:500;
+    border-radius:2px; transition:background .15s ease, color .15s ease;
+  }
+  footer.contact .cta-btn:hover{background:var(--forest-soft); color:var(--forest);}
+  .foot-links{display:flex; flex-direction:column; gap:10px; align-items:flex-end;}
+  .foot-links a{font-size:13px; opacity:.85;}
+  .foot-links a:hover{opacity:1; text-decoration:underline;}
+  .foot-bottom{
+    margin-top:80px; padding-top:24px; border-top:1px solid rgba(240,232,222,.2);
+    display:flex; justify-content:space-between; font-size:12px; opacity:.6;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (max-width:860px){
+    .wrap{padding:0 22px;}
+    .work-row{grid-template-columns:1fr; gap:16px;}
+    .work-title{font-size:19px;}
+    .navlinks{gap:18px;}
+    footer.contact .wrap{flex-direction:column; align-items:flex-start;}
+    .foot-links{align-items:flex-start;}
+    .foot-bottom{flex-direction:column; gap:8px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1; transform:none; transition:none;}
+    footer.contact.footer-animate{animation:none; background:var(--forest);}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="wordmark" href="index.html">Kristen Khong</a>
+    <div class="navlinks">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <a href="play.html">Play</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <p class="eyebrow" style="margin-bottom:18px;">Side projects & Experiments</p>
+      <h1>A collection of <em>web apps</em> and digital toys built for fun.</h1>
+    </div>
+  </div>
+</header>
+
+<section class="work">
+  <div class="wrap">
+    <div class="work-list">
+      <div class="work-row reveal">
+        <div>
+          <div class="work-title">Carpark Calculator</div>
+          <div class="work-sub">A simple utility to calculate carpark rates</div>
+        </div>
+        <a href="carpark-calculator.html" class="work-link">Let's go</a>
+      </div>
+      <!-- Add more apps here -->
+    </div>
+  </div>
+</section>
+
+<footer class="contact">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" style="color:var(--forest-soft); opacity:.7;">OPEN TO NEW OPPORTUNITIES</p>
+      <h2>Looking to hire a senior<br>product designer?</h2>
+      <a class="cta-btn" href="https://www.linkedin.com/in/kristenkhong/">Get in touch →</a>
+    </div>
+    
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© 2026 KRISTEN KHONG</span>
+  </div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.15});
+  els.forEach(el=>io.observe(el));
+
+  const footer = document.querySelector('footer.contact');
+  const mobileQuery = window.matchMedia('(max-width:860px)');
+  let footerRaf = null;
+
+  const footerPalette = [
+    {r:0x24,g:0x3C,b:0x2E}, // forest
+    {r:0x8C,g:0x3B,b:0x2E}, // terracotta
+    {r:0x8A,g:0x5A,b:0x1E}, // ochre
+    {r:0x1F,g:0x5C,b:0x52}, // deep teal
+    {r:0x33,g:0x32,b:0x6E}, // indigo
+    {r:0x6E,g:0x2F,b:0x52}, // berry
+    {r:0x24,g:0x3C,b:0x2E}  // back to forest
+  ];
+
+  function lerp(a, b, t){ return a + (b - a) * t; }
+
+  function colorAt(pos){
+    const segs = footerPalette.length - 1;
+    const scaled = Math.min(Math.max(pos, 0), 1) * segs;
+    const i = Math.min(Math.floor(scaled), segs - 1);
+    const t = scaled - i;
+    const c1 = footerPalette[i];
+    const c2 = footerPalette[i + 1];
+    const r = Math.round(lerp(c1.r, c2.r, t));
+    const g = Math.round(lerp(c1.g, c2.g, t));
+    const b = Math.round(lerp(c1.b, c2.b, t));
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function setFooterFromCursor(e){
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+    const base = colorAt(x);
+    footer.style.background = base;
+    footer.style.backgroundImage = `linear-gradient(rgba(255,255,255,${(0.5 - y) * 0.06}), rgba(255,255,255,${(0.5 - y) * 0.06}))`;
+  }
+
+  function onMouseMove(e){
+    if (mobileQuery.matches) return;
+    if (footerRaf) return;
+    footerRaf = requestAnimationFrame(()=>{
+      setFooterFromCursor(e);
+      footerRaf = null;
+    });
+  }
+
+  function initFooterColor(){
+    if (mobileQuery.matches){
+      footer.classList.add('footer-animate');
+      footer.style.background = '';
+      footer.style.backgroundImage = '';
+    } else {
+      footer.classList.remove('footer-animate');
+      footer.style.background = 'var(--forest)';
+      footer.style.backgroundImage = '';
+    }
+  }
+
+  initFooterColor();
+  mobileQuery.addEventListener('change', initFooterColor);
+  document.addEventListener('mousemove', onMouseMove);
+</script>
+
+</body>
+</html>
